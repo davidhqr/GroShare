@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>>
+  <!-- Page Title -->
+  <title>GroShare</title>
+  <!-- Import Bootstrap from CDN-->
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/bootstrap-clearmin.min.css">
+
+  <!--Import jQuary from CDN-->
+  <script src="js/jquery-3.3.1.js"></script>
+</head>
+<body>
+  <br> <br> <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="panel panel-success">
+          <div class="panel-heading text-center"><h4>Register</h4></div>
+          <div class="panel-body">
+            <form action="register.php" method="post">
+              <div class="form-group">
+                <label for="usr">Username:</label>
+                <input type="text" name="username" placeholder="Username" class="form-control" id="usr">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="enail" name="email" placeholder="me@example.com" class="form-control" id="email">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" name="password" placeholder="Password" class="form-control" id="pwd">
+              </div>
+              <div class="row">
+                <div class="col-md-2">
+                  <input type="submit" id="submit" class="btn btn-success" value="Sign Up">
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                  <p style="margin-top: 6px;">Already have an account? <a href="login.html">Login!</a></p>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

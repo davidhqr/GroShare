@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-clearmin.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/roboto.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/material-design.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/small-n-flat.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+	<title>GroShare</title>
+</head>
+<body class="cm-no-transition cm-1-navbar">
+	<div id="cm-menu">
+		<nav class="cm-navbar cm-navbar-success">
+			<div class="cm-flex" style="text-align: center; vertical-align: middle;"><span style="font-weight: bold; font-size: 20px;">GroShare</span></div>
+			<div class="btn btn-success md-menu-white" data-toggle="cm-menu"></div>
+		</nav>
+		<div id="cm-menu-content">
+			<div id="cm-menu-items-wrapper">
+				<div id="cm-menu-scroller">
+					<ul class="cm-menu-items">
+						<li><a href="dashboard-home.html" class="sf-house">Home</a></li>
+						<li class="active"><a href="#" class="sf-basket">Request Groceries</a></li>
+						<li><a href="dashboard-contribute.html" class="sf-carton">Contribute Groceries</a></li>
+						<li><a href="#" class="sf-building">My Community</a></li>
+						<li><a href="#" class="sf-profile">My Profile</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<header id="cm-header">
+		<nav class="cm-navbar cm-navbar-success">
+			<div class="btn btn-success md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+			<div class="cm-flex"><h1>Request Groceries</h1></div>
+		</nav>
+	</header>
+	<div id="global">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-8">
+					<div class="panel panel-default">
+						<div class="panel-heading">Shopping List</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<p>Item Name:</p>
+									<input id="grocery-name" type="text" class="form-control">
+								</div>
+								<div class="col-md-2">
+									<p>Max. Price:</p>
+									<input id="grocery-price" type="text" oninput="this.value=this.value.replace(/[^0-9.]/g,'');" class="form-control">
+								</div>
+								<div class="col-md-2">
+									<p>Quantity:</p>
+									<input id="grocery-quantity" type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control">
+								</div>
+								<div class="col-md-2">
+									<br>
+									<button id="add" style="margin-left: 5px; margin-top: 10px;" class="btn btn-success">Add</button>
+								</div>
+							</div>
+							<br>
+							<div class="list-container">
+								<ol class="list-group" id="grocery-list" style="overflow: auto;">
+									<!--<li class="list-group-item justify-content-between" style="white-space: nowrap;">item 
+										<button style="margin-left: 10px;" type="button" class="close" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<span class="badge badge-default badge-pill">x13</span>
+										<span class="badge badge-default badge-pill">$4</span>
+									</li>-->
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">Confirmation</div>
+						<div class="panel-body">
+							<p>Note:</p>
+							<textarea class="form-control" rows="3" id="notes"></textarea>
+							<br>
+							<p>Time Limit (hr):</p>
+							<input class="form-control" id="time" type="number">
+							<br>
+							<p>Total Quantity</p>
+							<div class="input-group">
+								<input type="text" id="quantity-display" class="form-control" value="0" readonly>
+							</div>
+							<br>
+							<p>Maximum Price:</p>
+							<div class="input-group">
+								<span class="input-group-addon">$</span>
+								<input type="text" id="price-display" class="form-control" value="0.00" readonly>
+							</div>
+							<br>
+							<button id="send" class="btn btn-success center-block">Send Request</button>
+							<br>
+							<a id="return" href="dashboard-home.html" class="btn btn-success center-block" style="visibility: hidden;">Return Home</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="assets/js/lib/jquery-2.1.3.min.js"></script>
+<script src="assets/js/jquery.mousewheel.min.js"></script>
+<script src="assets/js/jquery.cookie.min.js"></script>
+<script src="assets/js/fastclick.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/clearmin.min.js"></script>
+
+<script type="text/javascript">
+	var count;
+	var totalPrice;
+	var totalQuantity;
+
+	$(document).ready(function() {
+		count = 0;
+		totalPrice = 0;
+		totalQuantity = 0;
+	});
+
+
+	 $("#add").on("click", function() {
+		var value = $("#grocery-name").val();
+		var price = $('#grocery-price').val();
+		var quantity = $('#grocery-quantity').val();
+		if (value === "") {
+			alert('Please enter a valid item name');
+		} else if (price === "") {
+			alert('Please enter a valid price');
+		} else if (quantity === "") {
+			alert('Please enter a valid quantity');
+		} else {
+			totalPrice += parseInt(quantity) * parseFloat(price);
+			totalQuantity += parseInt(quantity);
+		    	//create a list item element
+		    	$("ol").append("<li id='item" + count +"' class='list-group-item justify-content-between' style='white-space: nowrap;'>" + value + "<button style='margin-left: 10px;' type='button' class='close'><span aria-hidden='true'>&times;</span></button><span class='badge badge-default badge-pill'>x" + quantity + "</span><span class='badge badge-default badge-pill'>$" + Number(price).toFixed(2) + "</span></li>");
+		    	$("#item" + count).attr("value", value);
+		    	$("#item" + count).attr("price", price);
+		    	$("#item" + count).attr("quantity", quantity);
+		    	$("#grocery-name").val("");
+		    	$('#grocery-price').val("");
+		    	$('#grocery-quantity').val("");
+		    	$("#price-display").val(Number(totalPrice).toFixed(2));
+		    	$("#quantity-display").val(parseInt(totalQuantity));
+		    	count++;
+		    }
+		});
+
+		$("#grocery-list").on("click", ".close", function() {
+			var lis = $(this).closest("li");
+			totalPrice -= parseFloat(lis.attr("price")) * parseInt(lis.attr("quantity"));
+			totalQuantity -= parseInt(lis.attr("quantity"));
+			$("#price-display").val(Number(totalPrice).toFixed(2));
+			$("#quantity-display").val(parseInt(totalQuantity));
+			lis.remove();
+
+		});
+
+		$("#send").on("click", function() {
+			var time = $('#time').val();
+			if (time === "") {
+				alert('Please enter a valid time limit');
+				return;
+			} 
+			$("#send").text("Submitted");
+			$("#send").removeClass("btn-success");
+			$("#send").addClass("disabled");
+			$("#add").removeClass("btn-success");
+			$("#add").addClass("disabled");
+			$("#return").css("visibility", "visible");
+
+
+
+			var nam = "Linda";
+			var arr = Array(count);
+			for (var i = 0; i < count; i++) {
+				var v = $("#item" + i).attr("value");
+				var p = $("#item" + i).attr("price");
+				var q = $("#item" + i).attr("quantity");
+				var obj = { name:"item" + i, value:"" + v, price:"" + p, quantity:"" + q};
+				arr[i] = obj;
+			} 
+
+
+			$.ajax({
+				type: "POST",				
+				url: "request.php",
+				data: {json: JSON.stringify({ "name": nam, "items": arr })},
+				success: function(json) {
+				}
+			});
+		});
+	</script>
+</body>
+</html>
